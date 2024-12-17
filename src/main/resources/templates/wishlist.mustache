@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wishlist</title>
+</head>
+<body>
+<h1>Deine Wunschliste</h1>
+
+<form action="/wishlist/add" method="post">
+    <label for="itemName">Neuer Wunsch:</label>
+    <input type="text" id="itemName" name="itemName" required>
+    <button type="submit">Hinzufügen</button>
+</form>
+
+<ul>
+    {{#wishlist}}
+        <li>
+            {{itemName}}
+            <form action="/wishlist/remove" method="post" style="display:inline;">
+                <input type="hidden" name="itemId" value="{{id}}">
+                <button type="submit">Entfernen</button>
+            </form>
+        </li>
+    {{/wishlist}}
+</ul>
+
+<a href="/">Zurück zur Startseite</a>
+</body>
+</html>
