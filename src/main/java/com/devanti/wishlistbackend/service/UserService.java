@@ -4,6 +4,7 @@ import com.devanti.wishlistbackend.model.User;
 import com.devanti.wishlistbackend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -16,6 +17,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public boolean registerUser(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {
             return false; // Username already exists

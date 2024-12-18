@@ -2,6 +2,7 @@ package com.devanti.wishlistbackend.controller;
 
 import com.devanti.wishlistbackend.model.User;
 import com.devanti.wishlistbackend.service.WishlistService;
+import com.devanti.wishlistbackend.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,28 +13,35 @@ import org.springframework.web.bind.annotation.*;
 public class WishlistController {
 
     private final WishlistService wishlistService;
+    private final UserRepository userRepository; // UserRepository hinzufügen
 
-    public WishlistController(WishlistService wishlistService) {
+    // Konstruktor-Injektion
+    public WishlistController(WishlistService wishlistService, UserRepository userRepository) {
         this.wishlistService = wishlistService;
+        this.userRepository = userRepository; // UserRepository initialisieren
     }
 
     @GetMapping
     public String getWishlist(@AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails, Model model) {
-        // Aktuellen Benutzer identifizieren
-        User user = new User();
-        user.setUsername(userDetails.getUsername());
+        // Benutzer aus der Datenbank laden
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden: " + userDetails.getUsername()));
 
         // Wunschliste abrufen
         model.addAttribute("wishlist", wishlistService.getUserWishlist(user.getId()));
-        return "wishlist"; // Zeigt die Wunschliste an
+        return "wishlist";
     }
 
     @PostMapping("/add")
     public String addItem(@RequestParam String itemName, @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
-        User user = new User();
-        user.setUsername(userDetails.getUsername());
+        // Benutzer aus der Datenbank laden
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden: " + userDetails.getUsername()));
 
+        // Wunsch hinzufügen
         wishlistService.addItemToWishlist(user, itemName);
+
+        // Nach dem Hinzufügen zurück zur Wunschliste weiterleiten
         return "redirect:/wishlist";
     }
 
