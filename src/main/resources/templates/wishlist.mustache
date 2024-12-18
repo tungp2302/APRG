@@ -13,16 +13,25 @@
     <button type="submit">Hinzufügen</button>
 </form>
 
+<h2>Wünsche</h2>
 <ul>
     {{#wishlist}}
-        <li>
-            {{itemName}}
-            <form action="/wishlist/remove" method="post" style="display:inline;">
-                <input type="hidden" name="itemId" value="{{id}}">
-                <button type="submit">Entfernen</button>
-            </form>
-        </li>
+        <li>{{itemName}}</li>
     {{/wishlist}}
+</ul>
+
+<h2>Teilen</h2>
+<form action="/wishlist/share" method="post">
+    <label for="recipientEmail">E-Mail des Empfängers:</label>
+    <input type="email" id="recipientEmail" name="recipientEmail" required>
+    <button type="submit">Teilen</button>
+</form>
+
+<h2>Geteilte Wunschlisten</h2>
+<ul>
+    {{#sharedWishlists}}
+        <li>Geteilt mit: {{recipientEmail}} am {{sharedAt}}</li>
+    {{/sharedWishlists}}
 </ul>
 
 <a href="/">Zurück zur Startseite</a>

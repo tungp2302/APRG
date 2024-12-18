@@ -21,26 +21,27 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register() {
-        return "register"; // Returns the registration page
+        return "register"; // Zeigt die Registrierungsseite an
     }
 
     @PostMapping("/register")
     public String handleRegister(@RequestParam String username, @RequestParam String password, Model model) {
         if (userService.registerUser(username, password)) {
-            // Auto-login the user after successful registration
+            // Benutzer nach erfolgreicher Registrierung automatisch einloggen
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
             authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(token);
 
-            return "redirect:/"; // Redirect to the home page after successful registration
+            return "redirect:/wishlist"; // Weiterleitung zur Wunschliste nach der Registrierung
         } else {
-            model.addAttribute("error", "Username already exists!");
-            return "register"; // Stay on the registration page if username exists
+            model.addAttribute("error", "Der Benutzername existiert bereits!");
+            return "register"; // Bleibt auf der Registrierungsseite, wenn der Benutzername existiert
         }
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Returns the login page
+        return "login"; // Zeigt die Login-Seite an
     }
 }
+

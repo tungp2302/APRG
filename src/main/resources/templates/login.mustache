@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
 <h1>Login</h1>
-<form method="post" action="/login">
-    <label for="username">Username:</label>
+{{#error}}
+    <div style="color: red;">{{error}}</div>
+{{/error}}
+<form action="/login" method="post">
+    <label for="username">Benutzername:</label>
     <input type="text" id="username" name="username" required>
     <br>
-    <label for="password">Password:</label>
+    <label for="password">Passwort:</label>
     <input type="password" id="password" name="password" required>
     <br>
     <button type="submit">Login</button>
 </form>
-<p>Kein Account? <a href="/register">Jetzt registrieren</a></p>
+<a href="/register">Noch keinen Account? Registrieren</a>
 </body>
 </html>

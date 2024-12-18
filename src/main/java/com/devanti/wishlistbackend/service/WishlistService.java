@@ -32,4 +32,19 @@ public class WishlistService {
     public void removeItemFromWishlist(Long itemId) {
         wishlistRepository.deleteById(itemId);
     }
+
+    public List<WishlistItem> getPublicWishlistItems() {
+        // Beispielitems (alternativ: aus der Datenbank laden)
+        WishlistItem item1 = new WishlistItem();
+        item1.setItemName("Beispiel-Item 1");
+
+        WishlistItem item2 = new WishlistItem();
+        item2.setItemName("Beispiel-Item 2");
+
+        WishlistItem item3 = new WishlistItem();
+        item3.setItemName("Beispiel-Item 3");
+
+        return List.of(item1, item2, item3);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.devanti.wishlistbackend.controller;
 
 import com.devanti.wishlistbackend.model.User;
 import com.devanti.wishlistbackend.service.WishlistService;
+import com.devanti.wishlistbackend.service.SharedWishlistService;
 import com.devanti.wishlistbackend.repository.UserRepository;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,11 +15,13 @@ public class WishlistController {
 
     private final WishlistService wishlistService;
     private final UserRepository userRepository; // UserRepository hinzufügen
+    private final SharedWishlistService sharedWishlistService;
 
     // Konstruktor-Injektion
-    public WishlistController(WishlistService wishlistService, UserRepository userRepository) {
+    public WishlistController(WishlistService wishlistService, UserRepository userRepository, SharedWishlistService sharedWishlistService) {
         this.wishlistService = wishlistService;
         this.userRepository = userRepository; // UserRepository initialisieren
+        this.sharedWishlistService = sharedWishlistService;
     }
 
     @GetMapping
@@ -29,6 +32,7 @@ public class WishlistController {
 
         // Wunschliste abrufen
         model.addAttribute("wishlist", wishlistService.getUserWishlist(user.getId()));
+        model.addAttribute("sharedWishlists", sharedWishlistService.getSharedWishlists(user.getId())); // Geteilte Wunschlisten anzeigen
         return "wishlist";
     }
 
@@ -48,6 +52,14 @@ public class WishlistController {
     @PostMapping("/remove")
     public String removeItem(@RequestParam Long itemId) {
         wishlistService.removeItemFromWishlist(itemId);
+        return "redirect:/wishlist";
+    }
+    @PostMapping("/share")
+    public String shareWishlist(@RequestParam String recipientEmail, @AuthenticationPrincipal org.springframework.security.core.userdetails.User userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden: " + userDetails.getUsername()));
+
+        sharedWishlistService.shareWishlist(user, recipientEmail);
         return "redirect:/wishlist";
     }
 }

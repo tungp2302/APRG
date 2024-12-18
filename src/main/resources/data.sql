@@ -13,14 +13,11 @@ CREATE TABLE IF NOT EXISTS wishlist_items (
                                               FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Testbenutzer erstellen (Passwörter sind mit BCrypt verschlüsselt)
-INSERT INTO users (username, password) VALUES ('testuser', '$2a$10$yGe0GGz9hPT6KBg0Ivw5wepOeEJZaCh8Rek7qPmfE3nC2hFglkpY2');
-INSERT INTO users (username, password) VALUES ('seconduser', '$2a$10$yGe0GGz9hPT6KBg0Ivw5wepOeEJZaCh8Rek7qPmfE3nC2hFglkpY2');
-
--- Wunschlisteneinträge für Benutzer 1 erstellen
-INSERT INTO wishlist_items (user_id, item_name) VALUES (1, 'Neue Sneakers');
-INSERT INTO wishlist_items (user_id, item_name) VALUES (1, 'Coole Jacke');
-
--- Wunschlisteneinträge für Benutzer 2 erstellen
-INSERT INTO wishlist_items (user_id, item_name) VALUES (2, 'Laptop Rucksack');
-INSERT INTO wishlist_items (user_id, item_name) VALUES (2, 'Smartwatch');
+-- Neue Tabelle für geteilte Wunschlisten
+CREATE TABLE IF NOT EXISTS shared_wishlists (
+                                                id BIGINT AUTO_INCREMENT PRIMARY KEY, -- ID wird automatisch generiert
+                                                owner_id BIGINT NOT NULL, -- Benutzer, dem die Wunschliste gehört
+                                                recipient_email VARCHAR(255) NOT NULL, -- E-Mail des Empfängers
+                                                shared_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Zeitpunkt des Teilens
+                                                FOREIGN KEY (owner_id) REFERENCES users(id)
+);

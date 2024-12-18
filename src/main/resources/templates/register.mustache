@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <title>Registrieren</title>
 </head>
 <body>
 <h1>Registrieren</h1>
-<form method="post" action="/register">
-    <label for="username">Username:</label>
+{{#error}}
+    <div style="color: red;">{{error}}</div>
+{{/error}}
+<form action="/register" method="post">
+    <label for="username">Benutzername:</label>
     <input type="text" id="username" name="username" required>
     <br>
-    <label for="password">Password:</label>
+    <label for="password">Passwort:</label>
     <input type="password" id="password" name="password" required>
     <br>
     <button type="submit">Registrieren</button>
 </form>
-<p>Schon einen Account? <a href="/login">Jetzt einloggen</a></p>
+<a href="/login">Bereits einen Account? Login</a>
 </body>
 </html>
